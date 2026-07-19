@@ -1,0 +1,59 @@
+data:
+  dataset: kitti
+  dataset_root: /data/dataset/KITTI
+  train_file: /data/test/code/HighlyAccurate/dataLoader/train_files.txt
+  test1_file: /data/test/code/HighlyAccurate/dataLoader/test1_files.txt
+  test2_file: /data/test/code/HighlyAccurate/dataLoader/test2_files.txt
+  cross_area: true
+  rotation_range: 0
+  shift_range_lat: 20.0
+  shift_range_lon: 20.0
+  image_size: 512
+  sat_size: 640
+  zoom: 20
+  bev_size: 300
+
+model:
+  teacher_ckpt: null
+  student_ckpt: null
+  teacher_dino_model: vitl14
+  student_dino_model: vits14
+  student_width: 0.5
+  init_from_teacher: true
+  levels: [0, 2]
+  channels: [64, 16, 4]
+
+distill:
+  student_temp: 0.06
+  teacher_temp: 0.06
+
+train:
+  train: true
+  batch_size_per_gpu: 4
+  epochs: 10
+  seed: 2023
+  clip: 1.0
+
+eval:
+  target: student
+
+optim:
+  lr: 0.0001
+  min_lr: 0.00001
+  weight_decay: 0.00001
+
+runtime:
+  distributed: true
+  gpuid: [0]
+  num_workers: 8
+
+logging:
+  wandb: false
+  wandb_log_interval: 20
+  visualize: false
+  save_visualization: false
+  vis_freq: 100
+
+output:
+  save_path: checkpoints
+  name: kitti-geokd-pruned

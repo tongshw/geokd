@@ -1,0 +1,64 @@
+data:
+  dataset: vigor
+  dataset_root: /data/dataset/VIGOR
+  cross_area: true
+  image_size: 512
+  sat_size: 640
+  zoom: 20
+  bev_size: 512
+  grid_size: 8
+  ori_noise: 45
+
+model:
+  teacher_ckpt: "/home/shaowen/code/geokd/teahcer_ckpt/translation/vigor/cross-geodistill-dino.pth"
+  student_ckpt: "/home/shaowen/code/geokd/checkpoints/vigor/geokd/student/vigor-cross-peak-hard_best.pth"
+  teacher_dino_model: vitb14
+  student_dino_model: vits14
+  student_width: 0.5
+  init_from_teacher: true
+  levels: [0, 2]
+  channels: [64, 16, 4]
+
+distill:
+  student_temp: 0.06
+  teacher_temp: 0.06
+  distill_mode: peak_hard
+  uncertainty_weighting: false
+  uncertainty_weight_min: 0.25
+  uncertainty_weight_power: 1.0
+  peak_radius: 2
+  peak_topk: 1
+  peak_region_weight: 4.0
+  hard_negative_topk: 32
+  hard_negative_weight: 1.0
+
+train:
+  train: false
+  batch_size_per_gpu: 16
+  epochs: 10
+  seed: 2023
+  clip: 1.0
+
+eval:
+  target: student
+
+optim:
+  lr: 0.0001
+  min_lr: 0.00001
+  weight_decay: 0.00001
+
+runtime:
+  distributed: true
+  gpuid: [0]
+  num_workers: 8
+
+logging:
+  wandb: true
+  wandb_log_interval: 20
+  visualize: false
+  save_visualization: false
+  vis_freq: 100
+
+output:
+  save_path: checkpoints
+  name: vigor-cross-peak-hard
