@@ -37,3 +37,4 @@ datasets/
 .DS_Store
 .idea/
 .vscode/
+checkpoints/
